@@ -1,0 +1,43 @@
+.main_Container {
+  background-color: #750000;
+  font-family: "Montserrat Alternates", sans-serif;
+  color: white;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  min-height: 100%;
+}
+
+.leftTrending {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.leftTrending h2 {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+.leftTrending br {
+  margin: 0;
+  padding: 0;
+}
+.leftTrending p {
+  margin: 20px 0 15px;
+  color: #949cb0;
+}
+
+.hr1 {
+  margin: 0 0 20px;
+  width: 30%;
+  border-top: 2px solid #a8a8a83d;
+}
+.hr2 {
+  margin: 0;
+  border-top: 2px solid white;
+}
+
+#matchContainer {
+  /* border: 1px solid green; */
+}

@@ -37,7 +37,7 @@ export default function Login() {
           className="col-sm col-lg-7 col-md-12 col-sm-12 order-lg-1 order-md-2 order-sm-2 order-2"
           id={style_.image}
         >
-          <img src={img} width="100%" height="690px"></img>
+          <img src={img} width="100%" height="844px"></img>
         </div>
         {/* right part */}
         <div
@@ -81,6 +81,8 @@ export default function Login() {
               <br />
               <span className="line">
                 <Link to="/signup">Sign Up</Link>
+                <br />
+                <Link to="/home">Go to home</Link>
               </span>
             </p>
           </section>
