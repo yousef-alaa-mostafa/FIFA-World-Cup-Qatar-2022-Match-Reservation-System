@@ -80,7 +80,7 @@ export default function Login() {
               press sign up for Regestration
               <br />
               <span className="line">
-                <Link to="/signup">Sign Upp</Link>
+                <Link to="/signup">Sign Up</Link>
               </span>
             </p>
           </section>
