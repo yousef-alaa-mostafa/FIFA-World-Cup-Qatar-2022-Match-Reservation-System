@@ -72,7 +72,7 @@ export default function Login() {
                 required
               ></input>
 
-              <button type="button" class="btn btn-danger">
+              <button type="submit" class="btn btn-danger">
                 Sign In
               </button>
             </form>
