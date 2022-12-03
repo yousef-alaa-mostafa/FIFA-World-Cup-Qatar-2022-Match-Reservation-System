@@ -158,7 +158,22 @@ export default function Signup() {
                 Must begin with a letter. <br />
                 Letters, numbers, underscores, hyphens allowed.
               </p>
+              {/*-------------------- email part------------------------ */}
+              <label>
+                Email:
+                <span className={Email ? style_.valid : style_.hide}>
+                  <FontAwesomeIcon icon={faCheck} />
+                </span>
+              </label>
+              <input
+                type="text"
+                autoComplete="off"
+                onChange={(e) => setEmail(e.target.value)}
+                value={Email}
+                required
+              />
               {/*-------------------- password part------------------------ */}
+
               <label htmlFor="password">
                 Password:
                 <span className={validPwd ? style_.valid : style_.hide}>
