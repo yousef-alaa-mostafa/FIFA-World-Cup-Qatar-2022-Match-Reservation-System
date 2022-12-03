@@ -36,7 +36,7 @@ export default function Home() {
                   <br />
                   Details to review
                 </h2>
-                <p>to reserve ticket you shoud register</p>
+                <p>to reserve a ticket you shoud register</p>
                 <hr className={style_.hr2} />
               </div>
             </div>
