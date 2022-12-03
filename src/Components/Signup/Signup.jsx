@@ -35,6 +35,7 @@ export default function Signup() {
   const [first_name, set_first_name] = useState("");
   const [last_name, set_last_name] = useState("");
 
+  const [Birth_Date, set_Birth_Date] = useState("");
   const [Gender, setGender] = useState("");
   const [Nationality, setNationality] = useState("");
   const [Email, setEmail] = useState("");
@@ -94,41 +95,6 @@ export default function Signup() {
           <section>
             <h1>Sign Up</h1>
             <form onSubmit={HandleSubmit}>
-              {/*-------------------- user name part------------------------ */}
-              <label htmlFor="username">
-                Username:
-                <span className={validName ? style_.valid : style_.hide}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </span>
-                <span
-                  className={validName || !user ? style_.hide : style_.invalid}
-                >
-                  <FontAwesomeIcon icon={faTimes} />
-                </span>
-              </label>
-              <input
-                type="text"
-                id="username"
-                ref={userRef}
-                autoComplete="off"
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
-                required
-                onFocus={() => setUserFocus(true)}
-                onBlur={() => setUserFocus(false)}
-              />
-              <p
-                className={
-                  userFocus && user && !validName
-                    ? style_.instructions
-                    : style_.offscreen
-                }
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                4 to 24 characters. <br />
-                Must begin with a letter. <br />
-                Letters, numbers, underscores, hyphens allowed.
-              </p>
               {/*-------------------- first and last name part------------------------ */}
               <label>
                 First name:
@@ -153,10 +119,45 @@ export default function Signup() {
               <input
                 type="text"
                 autoComplete="off"
-                onChange={(e) => set_first_name(e.target.value)}
-                value={first_name}
+                onChange={(e) => set_last_name(e.target.value)}
+                value={last_name}
                 required
               />
+              {/*-------------------- user name part------------------------ */}
+              <label htmlFor="username">
+                Username:
+                <span className={validName ? style_.valid : style_.hide}>
+                  <FontAwesomeIcon icon={faCheck} />
+                </span>
+                <span
+                  className={validName || !user ? style_.hide : style_.invalid}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                // ref={userRef}
+                autoComplete="off"
+                onChange={(e) => setUser(e.target.value)}
+                value={user}
+                required
+                onFocus={() => setUserFocus(true)}
+                onBlur={() => setUserFocus(false)}
+              />
+              <p
+                className={
+                  userFocus && user && !validName
+                    ? style_.instructions
+                    : style_.offscreen
+                }
+              >
+                <FontAwesomeIcon icon={faInfoCircle} />
+                4 to 24 characters. <br />
+                Must begin with a letter. <br />
+                Letters, numbers, underscores, hyphens allowed.
+              </p>
               {/*-------------------- password part------------------------ */}
               <label htmlFor="password">
                 Password:
