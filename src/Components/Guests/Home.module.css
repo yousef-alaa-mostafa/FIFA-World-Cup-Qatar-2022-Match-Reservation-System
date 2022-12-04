@@ -1,5 +1,5 @@
 .main_Container {
-  background-color: #750000;
+  background-color: #131722;
   font-family: "Montserrat Alternates", sans-serif;
   color: white;
   margin: 0;
@@ -36,8 +36,4 @@
 .hr2 {
   margin: 0;
   border-top: 2px solid white;
-}
-
-#matchContainer {
-  /* border: 1px solid green; */
 }

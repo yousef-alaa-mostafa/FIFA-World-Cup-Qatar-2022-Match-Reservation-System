@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   font-size: large;
+  background-color: #131722;
 }
 #image {
   margin: 0;
@@ -11,7 +12,6 @@
 #form {
   padding: 0;
   margin: 0;
-  background-color: #2b7c85;
 
   display: flex;
   align-items: center;
