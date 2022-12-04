@@ -12,9 +12,16 @@ import img from "./images/fwc.jpg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// import ModernDatepicker from "react-modern-datepicker";
+//import dropdown
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
-import DatePickerr from "react-date-picker";
+//import coutry picker
+import {
+  CountryDropdown,
+  RegionDropdown,
+  CountryRegionData,
+} from "react-country-region-selector";
 
 // import fontawesome
 import {
@@ -23,6 +30,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { data } from "jquery";
 
 export default function Signup() {
   const userRef = useRef();
@@ -53,9 +61,12 @@ export default function Signup() {
   const [year, setyear] = useState();
 
   const [Gender, setGender] = useState("");
-  const [Nationality, setNationality] = useState("");
+  const genderOptions = ["Male", "Female"];
 
   const [Role, setRole] = useState("");
+  const roleOptions = ["Manager", "Admin", "Fan"];
+
+  const [Nationality, setNationality] = useState("");
 
   const [step1_desp, setStep1_desp] = useState("");
   const [step2_desp, setStep2_desp] = useState("none");
@@ -94,9 +105,13 @@ export default function Signup() {
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
+  //for testing
   useEffect(() => {
     console.log(day_ + "/" + month_ + "/" + year);
   }, [Birth_Date]);
+  useEffect(() => {
+    console.log(Gender);
+  }, [Gender]);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -226,6 +241,14 @@ export default function Signup() {
                   <FontAwesomeIcon icon={faInfoCircle} />
                   You Entered invalid email.
                 </p>
+                {/*--------------------nationality part------------------------ */}
+                <br />
+                <CountryDropdown
+                  style={{ height: "40px" }}
+                  value={Nationality}
+                  onChange={(data) => setNationality(data)}
+                />
+                {/*--------------------btns part------------------------ */}
                 <button
                   type="button"
                   className="btn btn-danger"
@@ -236,7 +259,8 @@ export default function Signup() {
                       user &&
                       validName &&
                       validEmail &&
-                      Email
+                      Email &&
+                      Nationality
                     ) {
                       setStep1_desp("none");
                       setStep2_desp("");
@@ -254,7 +278,6 @@ export default function Signup() {
               </form>
               <form style={{ display: step2_desp }}>
                 {/*-------------------- password part------------------------ */}
-
                 <label htmlFor="password">
                   Password:
                   <span className={validPwd ? style_.valid : style_.hide}>
@@ -266,7 +289,6 @@ export default function Signup() {
                     <FontAwesomeIcon icon={faTimes} />
                   </span>
                 </label>
-
                 <input
                   type="password"
                   id="password"
@@ -296,7 +318,6 @@ export default function Signup() {
                   <span aria-label="dollar sign">$</span>
                   <span aria-label="percent">%</span>
                 </p>
-
                 {/*-------------------- match password part------------------------ */}
                 <label htmlFor="confirm_pwd">
                   confirm password:
@@ -332,49 +353,8 @@ export default function Signup() {
                   <FontAwesomeIcon icon={faInfoCircle} />
                   Must match the first password input field
                 </p>
-                {/*--------------------role part------------------------ */}
-                <div class="dropdown">
-                  <button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Role
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">
-                      Manager
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      Admin
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      Fan
-                    </a>
-                  </div>
-                </div>
-                {/*--------------------gender part------------------------ */}
-                <div class="dropdown">
-                  <button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Gender
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">
-                      Male
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      Female
-                    </a>
-                  </div>
-                </div>
                 {/*--------------------birthdate part------------------------ */}
-                <br />
+                <label>Birth Date:</label>
                 <DatePicker
                   selected={Birth_Date}
                   onChange={(date) => {
@@ -384,12 +364,26 @@ export default function Signup() {
                     setmonth_(date.getMonth() + 1);
                   }}
                 />
+                {/*--------------------role part------------------------ */}
+                <br />
+                <Dropdown
+                  options={roleOptions}
+                  onChange={(data) => {
+                    setRole(data.value);
+                  }}
+                  placeholder="Role"
+                />
+                {/*--------------------gender part------------------------ */}
+                <br />
+                <Dropdown
+                  options={genderOptions}
+                  onChange={(data) => {
+                    setGender(data.value);
+                  }}
+                  placeholder="Gender"
+                />
 
-                {/* <DatePickerr
-                  onChange={(date) => set_Birth_Date(date)}
-                  value={Birth_Date}
-                /> */}
-
+                {/*--------------------btns part------------------------ */}
                 <button
                   type="button"
                   className="btn btn-danger"
