@@ -34,14 +34,14 @@ export default function Login() {
       <div className="row" id={style_.main_Container}>
         {/* left part */}
         <div
-          className="col-sm col-lg-7 col-md-12 col-sm-12 order-lg-1 order-md-2 order-sm-2 order-2"
+          className="col-sm col-md col-lg-7 col-md-0 col-sm-0 order-lg-1 order-md-2 order-sm-2 order-2"
           id={style_.image}
         >
           <img src={img} width="100%" height="760px"></img>
         </div>
         {/* right part */}
         <div
-          className="col-sm col-lg-5 col-md-12 col-sm-12 order-lg-2 order-md-1 order-sm-1 order-1"
+          className="col-sm col-md col-lg-5 col-md-12 col-sm-12 order-lg-2 order-md-1 order-sm-1 order-1"
           id={style_.form}
         >
           <section>
@@ -51,7 +51,7 @@ export default function Login() {
             >
               {errMsg}
             </p>
-            <h1>Sign In</h1>
+            <h1>login </h1>
             <form onSubmit={HandleSubmit}>
               <label htmlFor="username">username</label>
               <input

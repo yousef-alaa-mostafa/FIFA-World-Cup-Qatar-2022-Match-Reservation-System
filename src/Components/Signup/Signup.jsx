@@ -101,14 +101,14 @@ export default function Signup() {
       <div className="row" id={style_.main_Container}>
         {/* left part */}
         <div
-          className="col-sm col-lg-7 col-md-12 col-sm-12 order-lg-1 order-md-2 order-sm-2 order-2"
+          className="col-sm col-md col-lg-7 col-md-0 col-sm-0 order-lg-1 order-md-2 order-sm-2 order-2"
           id={style_.image}
         >
           <img src={img} width="100%" height="760x"></img>
         </div>
         {/* right part */}
         <div
-          className="col-sm col-lg-5 col-md-12 col-sm-12 order-lg-2 order-md-1 order-sm-1 order-1"
+          className="col-sm col-md col-lg-5 col-md-12 col-sm-12 order-lg-2 order-md-1 order-sm-1 order-1"
           id={style_.form}
         >
           <section>
