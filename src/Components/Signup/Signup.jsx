@@ -40,6 +40,10 @@ export default function Signup() {
   const [validMatch, setValidMatch] = useState(false); // is match password = password or not
   const [matchFocus, setMatchFocus] = useState(false); // do we have focus on match password input field or not
 
+  const [Email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
+  const [EmailFocus, setEmailFocus] = useState(false);
+
   const [first_name, set_first_name] = useState("");
   const [last_name, set_last_name] = useState("");
 
@@ -50,7 +54,7 @@ export default function Signup() {
 
   const [Gender, setGender] = useState("");
   const [Nationality, setNationality] = useState("");
-  const [Email, setEmail] = useState("");
+
   const [Role, setRole] = useState("");
 
   const [step1_desp, setStep1_desp] = useState("");
@@ -64,6 +68,8 @@ export default function Signup() {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // to validate the password
   //atlest one lowercase letter and one uppercase letter one digit(0:9) and one special character
 
+  const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // to validate the email
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -73,6 +79,12 @@ export default function Signup() {
     const result = USER_REGEX.test(user);
     setValidName(result);
   }, [user]);
+
+  // to check every time the email changed if it's valid or not
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(Email);
+    setValidEmail(result);
+  }, [Email]);
 
   // to check every time the pwd or match pwd change if password valid and if password = matched password
   useEffect(() => {
@@ -184,8 +196,15 @@ export default function Signup() {
                 {/*-------------------- email part------------------------ */}
                 <label>
                   Email:
-                  <span className={Email ? style_.valid : style_.hide}>
+                  <span className={validEmail ? style_.valid : style_.hide}>
                     <FontAwesomeIcon icon={faCheck} />
+                  </span>
+                  <span
+                    className={
+                      validEmail || !Email ? style_.hide : style_.invalid
+                    }
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
                   </span>
                 </label>
                 <input
@@ -193,17 +212,38 @@ export default function Signup() {
                   autoComplete="off"
                   onChange={(e) => setEmail(e.target.value)}
                   value={Email}
+                  onFocus={() => setEmailFocus(true)}
+                  onBlur={() => setEmailFocus(false)}
                   required
                 />
+                <p
+                  className={
+                    EmailFocus && Email && !validEmail
+                      ? style_.instructions
+                      : style_.offscreen
+                  }
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  You Entered invalid email.
+                </p>
                 <button
                   type="button"
                   className="btn btn-danger"
                   onClick={() => {
-                    if (first_name && last_name && user && validName && Email) {
+                    if (
+                      first_name &&
+                      last_name &&
+                      user &&
+                      validName &&
+                      validEmail &&
+                      Email
+                    ) {
                       setStep1_desp("none");
                       setStep2_desp("");
                     } else if (!validName) {
                       alert("Enter valid username");
+                    } else if (!validEmail) {
+                      alert("Enter valid email");
                     } else {
                       alert("all fields are required");
                     }
