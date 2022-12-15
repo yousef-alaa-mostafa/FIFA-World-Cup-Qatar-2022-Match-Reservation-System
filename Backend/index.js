@@ -5,7 +5,8 @@ const mongoose= require('./database');
 const dotenv = require('dotenv');
 dotenv.config();
 //routes
-const signUpRouter = require('./routes/signUp');
+const auth = require('./routes/auth');
+const user = require('./routes/user');
 
 const app = express();
 
@@ -18,7 +19,8 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use('/user/signup',signUpRouter);
+app.use('/auth',auth);
+app.use('/user',user);
 
 console.log("process.env.PORT: "+process.env.PORT)
 const port = process.env.PORT || 3000;
