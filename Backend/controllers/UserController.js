@@ -1,4 +1,5 @@
 const User = require('../models/userSchema');
+const Match = require('../models/matchSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -129,6 +130,40 @@ const approveUser = async (req,res,next) => {
         res.status(400).json({message:err.message});
     }
 };
+
+const updateUser = async (req,res,next) => {
+    try{
+        const {username}=req.params;
+        const {firstName,lastName,password,role,birthdate,nationality,gender,creditCardNumber}= req.body;
+        const user = await User.updateOne({username:username},{$set:{firstName:firstName,lastName:lastName,password:password,
+            role:role,birthdate:birthdate,nationality:nationality,gender:gender,creditCardNumber:creditCardNumber}});
+        if(!user){
+            return res.status(400).json({message:'User does not exist'});
+        }
+        return res.status(201).send({ message:'User updated'});
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
+const reserve = async (req,res,next) => {
+    try{
+        const {username,match_id}=req.params;
+        const {seatNumber,creditCardNumber,creditPinNumber}= req.body;
+        const user = await User.find({username:username});
+        if(!user){
+            return res.status(400).json({message:'User does not exist'});
+        }
+        const match = await Match.findById(match_id);
+        if(!match){
+            return res.status(400).json({message:'Match does not exist'});
+        }
+    }
+    catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
 exports.createUser = createUser;
 exports.loginUser = loginUser;
 exports.checkUsername = checkUsername;
@@ -136,3 +171,5 @@ exports.getAllUsers = getAllUsers;
 exports.getNonApprovedUsers = getNonApprovedUsers;
 exports.deleteUser = deleteUser;
 exports.approveUser = approveUser;
+exports.updateUser = updateUser;
+exports.reserve = reserve;

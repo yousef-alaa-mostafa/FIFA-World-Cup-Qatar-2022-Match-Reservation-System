@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema ({
     gender:{type: String},
     matches:[{type: mongoose.Schema.Types.ObjectId ,ref: 'Match' }],
     approved:{type: Boolean, default: false},
+    creditCardNumber:{type: String},
 },{timestamps: true});
 
 userSchema.methods.generateJWT = function (){

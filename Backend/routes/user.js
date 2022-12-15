@@ -27,7 +27,7 @@ router.get('/pendingusers',async (req,res,next) => {
     }   
 });
 
-router.post('/deleteuser/:username',async (req,res,next) => {
+router.delete('/deleteuser/:username',async (req,res,next) => {
     try{
          await UserController.deleteUser(req,res,next);
     }catch(err){
@@ -35,11 +35,29 @@ router.post('/deleteuser/:username',async (req,res,next) => {
     }   
 });
 
-router.post('/approveuser/:username',async (req,res,next) => {
+router.patch('/approveuser/:username',async (req,res,next) => {
     try{
         await UserController.approveUser(req,res,next);
     }catch(err){
         res.status(400).json({message:err.message});
     }
 });
+
+router.patch('/updateuser/:username',async (req,res,next) => {
+    try{
+        await UserController.updateUser(req,res,next);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+});
+
+router.post('/reserve',async (req,res,next) => {
+    try{
+        await UserController.reserve(req,res,next);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+});
+
+
 module.exports = router;
