@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 
 
 const matchSchema = new mongoose.Schema ({
-    staduim: { type :String ,trim: true, required: true},
+    stadium: { type :mongoose.Schema.Types.ObjectId, ref: 'Stadium'},
     team1: {type :String ,required :true,trim: true},
     team2: {type :String ,required :true,trim: true},
     date: { type :Date ,required :true,trim: true},

@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema ({
     nationality: {type: String},
     gender:{type: String},
     matches:[{type: mongoose.Schema.Types.ObjectId ,ref: 'Match' }],
+    approved:{type: Boolean, default: false},
 },{timestamps: true});
 
 userSchema.methods.generateJWT = function (){

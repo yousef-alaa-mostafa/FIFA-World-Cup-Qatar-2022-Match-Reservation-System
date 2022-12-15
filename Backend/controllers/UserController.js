@@ -86,6 +86,53 @@ const checkUsername = async (req,res,next) => {
     }
 };
 
+const getAllUsers = async (req,res,next) => {
+    try{
+        const users = await User.find({$or:[{role:'Manager',approved:true},{role:'Fan'}]});
+        res.status(200).json(users);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
+const getNonApprovedUsers = async (req,res,next) => {
+    try{
+        const users = await User.find({approved:false,role:'Manager'});
+        res.status(200).json(users);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
+const deleteUser = async (req,res,next) => {
+    try{
+        const {username}=req.params;
+        const user = await User.findOneAndDelete({username:username});
+        if(!user){
+            return res.status(400).json({message:'User does not exist'});
+        }
+        return res.status(201).send({ message:'User deleted'});
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
+const approveUser = async (req,res,next) => {
+    try{
+        const {username}=req.params;
+        const user = await User.findOneAndUpdate({username:username,role:'Manager'},{approved:true});
+        if(!user){
+            return res.status(400).json({message:'User does not exist or is not a manager'});
+        }
+        return res.status(201).send({ message:'User approved'});
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
 exports.createUser = createUser;
 exports.loginUser = loginUser;
 exports.checkUsername = checkUsername;
+exports.getAllUsers = getAllUsers;
+exports.getNonApprovedUsers = getNonApprovedUsers;
+exports.deleteUser = deleteUser;
+exports.approveUser = approveUser;
