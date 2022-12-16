@@ -72,7 +72,9 @@ const editMatch = async (req, res) => {
         //check if staduium is available on the same date
         const match1 = await Match.findOne({stadium:dbstadium._id ,date:date ,time:time});
         if (match1) {
-            return res.status(400).json({ message: 'stadium is not available' });
+            if (match1._id != id) {
+                return res.status(400).json({ message: 'stadium is not available' });
+            }
         }
     }
     else {
@@ -96,7 +98,9 @@ const editMatch = async (req, res) => {
         //check if staduium is available on the same date
         const match3 = await Match.findOne({stadium:stadium ,date:date ,time:time}).select({"_id":1});
         if (match3) {
+            if (match3._id != id) {
             return res.status(400).json({ message: 'stadium is not available' });
+            }
         }
     }
             
