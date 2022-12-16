@@ -29,7 +29,7 @@ const addMatch = async (req, res) => {
     }
     //team1 and team2 can't be the same
     if (team1 == team2) {
-        return res.status(400).json({ message: 'team1 and team2 can\'t be the same' });
+        return res.status(400).json({ message: 'team1 and team2 can not be the same' });
     }
     const match = new Match({
         team1: team1,
