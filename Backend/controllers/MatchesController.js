@@ -82,13 +82,24 @@ const editMatch = async (req, res) => {
     if (team1 == team2) {
         return res.status(400).json({ message: 'team1 and team2 can not be the same' });
     }
-    //check if team1 or team2 have match on the same date
+    //check if team1 or team2 have match on the same date except the match that we want to edit
     if (req.body.team1 != null || req.body.team2 != null){
-        const match2 = await Match.findOne({$or:[{team1:team1 ,date:date},{team2:team2 ,date:date}]});
+        //check if team1 or team2 have match on the same date except the match that we want to edit
+        const match2 = await Match.findOne({$or:[{team1:team1 ,date:date},{team2:team2 ,date:date}]}).select({"_id":1});
         if (match2) {
-             return res.status(400).json({ message: 'team1 or team2 have match on the same date' });
+            if (match2._id != id) {
+                return res.status(400).json({ message: 'team1 or team2 have match on the same date' });
+            }
         }
     }
+    if (req.body.date != null || req.body.time != null){
+        //check if staduium is available on the same date
+        const match3 = await Match.findOne({stadium:stadium ,date:date ,time:time}).select({"_id":1});
+        if (match3) {
+            return res.status(400).json({ message: 'stadium is not available' });
+        }
+    }
+            
     try {
         const updatedMatch = await Match.updateOne({ _id: id }, {$set: {team1: team1, team2: team2, 
             stadium: stadium._id, date: date, time: time, lineman1: lineman1, lineman2: lineman2, referee: referee}});
