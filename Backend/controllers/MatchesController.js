@@ -27,6 +27,10 @@ const addMatch = async (req, res) => {
     if (match2) {
          return res.status(400).json({ message: 'team1 or team2 have match on the same date' });
     }
+    //team1 and team2 can't be the same
+    if (team1 == team2) {
+        return res.status(400).json({ message: 'team1 and team2 can\'t be the same' });
+    }
     const match = new Match({
         team1: team1,
         team2: team2,
@@ -44,5 +48,57 @@ const addMatch = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 };
+
+const editMatch = async (req, res) => {
+    const {id} = req.params;
+    const match = await Match.findById(id);
+    var { team1, team2, stadium, date, time, lineman1, lineman2 ,referee } = match;
+    if (!match) {
+        return res.status(400).json({ message: 'match not found' });
+    }
+    req.body.team1 != null ? team1 = req.body.team1 : team1 = team1;
+    req.body.team2 != null ? team2 = req.body.team2 : team2 = team2;
+    req.body.date != null ? date = req.body.date : date = date;
+    req.body.time != null ? time = req.body.time : time = time;
+    req.body.lineman1 != null ? lineman1 = req.body.lineman1 : lineman1 = lineman1;
+    req.body.lineman2 != null ? lineman2 = req.body.lineman2 : lineman2 = lineman2;
+    req.body.referee != null ? referee = req.body.referee : referee = referee;
+    if (req.body.stadium != null){
+        const dbstadium = await Stadium.findOne({ name : req.body.stadium }).select({"_id":1});
+        if (!dbstadium) {
+            return res.status(400).json({ message: 'stadium not found' });
+        }
+        stadium = dbstadium._id;
+        //check if staduium is available on the same date
+        const match1 = await Match.findOne({stadium:dbstadium._id ,date:date ,time:time});
+        if (match1) {
+            return res.status(400).json({ message: 'stadium is not available' });
+        }
+    }
+    else {
+        stadium = stadium;
+    }
+    //team1 and team2 can't be the same
+    if (team1 == team2) {
+        return res.status(400).json({ message: 'team1 and team2 can not be the same' });
+    }
+    //check if team1 or team2 have match on the same date
+    if (req.body.team1 != null || req.body.team2 != null){
+        const match2 = await Match.findOne({$or:[{team1:team1 ,date:date},{team2:team2 ,date:date}]});
+        if (match2) {
+             return res.status(400).json({ message: 'team1 or team2 have match on the same date' });
+        }
+    }
+    try {
+        const updatedMatch = await Match.updateOne({ _id: id }, {$set: {team1: team1, team2: team2, 
+            stadium: stadium._id, date: date, time: time, lineman1: lineman1, lineman2: lineman2, referee: referee}});
+        res.status(200).json(updatedMatch);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+
 exports.getMatches = getMatches;
 exports.addMatch = addMatch;
+exports.editMatch = editMatch;
