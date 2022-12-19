@@ -47,6 +47,11 @@ export default function navbar() {
                 Add Match
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/VacantAndReservedSeats">
+                Vacant And Reserved Seats
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>

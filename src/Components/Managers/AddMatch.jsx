@@ -16,6 +16,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function AddMatch() {
+  const errRef = useRef();
+  const [errMsg, setErrMsg] = useState("");
+
   const [FirstCountry, setFirstCountry] = useState("");
   const [secondCountry, setSecondCountry] = useState("");
 
@@ -52,11 +55,19 @@ export default function AddMatch() {
     "Daniel Siebert",
   ];
 
+  const handleClick = () => {
+    setErrMsg("Not complete");
+  };
+
   return (
     <div className={style_.main_Container}>
       <Navbar />
       <div className={style_.setterHolder}>
         <div className={style_.innerHolder}>
+          {/*--------------------Errors------------------------ */}
+          <p ref={errRef} className={errMsg ? style_.errMsg : style_.offscreen}>
+            {errMsg}
+          </p>
           {/*--------------------Match part------------------------ */}
           <input
             type={"text"}
@@ -123,6 +134,9 @@ export default function AddMatch() {
             }}
             placeholder="Select the second Linesman"
           />
+          {/*--------------------second Linesmen------------------------ */}
+          <br />
+          <button onClick={handleClick}>Add Match</button>
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import MatchesDetails from "./Components/Managers/MatchesDetails";
 import EditMatches from "./Components/Managers/EditMatches";
 import AddStadium from "./Components/Managers/AddStadium";
 import AddMatch from "./Components/Managers/AddMatch";
+import VacantAndReservedSeats from "./Components/Managers/VacantAndReservedSeats";
 
 // import react router
 import { Route, Routes } from "react-router-dom";
@@ -30,6 +31,10 @@ function App() {
         <Route path="/EditMatches" element={<EditMatches />} />
         <Route path="/AddStadium" element={<AddStadium />} />
         <Route path="/AddMatch" element={<AddMatch />} />
+        <Route
+          path="/VacantAndReservedSeats"
+          element={<VacantAndReservedSeats />}
+        />
       </Routes>
     </div>
   );

@@ -16,7 +16,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function EditMatches() {
+  const errRef = useRef();
+  const [errMsg, setErrMsg] = useState("");
+
   const [Matches, setMatches] = useState("");
+
   const MatchesOptions = [
     "Saudi Arabia VS Argentina",
     "Saudi Arabia VS Argentina",
@@ -56,11 +60,19 @@ export default function EditMatches() {
     "Daniel Siebert",
   ];
 
+  const handleClick = () => {
+    setErrMsg("Not complete");
+  };
+
   return (
     <div className={style_.main_Container}>
       <Navbar />
       <div className={style_.setterHolder}>
         <div className={style_.innerHolder}>
+          {/*-------------------- Errors ------------------------ */}
+          <p ref={errRef} className={errMsg ? style_.errMsg : style_.offscreen}>
+            {errMsg}
+          </p>
           {/*--------------------Match part------------------------ */}
           <br />
           <Dropdown
@@ -119,6 +131,9 @@ export default function EditMatches() {
             }}
             placeholder="Select the second Linesman"
           />
+          {/*--------------------second Linesmen------------------------ */}
+          <br />
+          <button onClick={handleClick}>Edit Match</button>
         </div>
       </div>
     </div>
