@@ -1,0 +1,27 @@
+.main_Container {
+  background-color: #131722;
+  font-family: "Montserrat Alternates", sans-serif;
+  color: white;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  min-height: 100%;
+}
+
+.setterHolder {
+  display: flex;
+
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.innerHolder {
+  margin: 60px;
+  width: 290px;
+}
+
+input[type="text"] {
+  font-size: 1rem;
+  width: 290px;
+  height: 45px;
+}
