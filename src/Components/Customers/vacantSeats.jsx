@@ -5,13 +5,13 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "./Navbar.jsx";
 
 // used styles
-import style_ from "./VacantAndReservedSeats.module.css";
+import style_ from "./Customer.module.css";
 
 //import dropdown
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
-export default function VacantAndReservedSeats() {
+export default function VacantSeats() {
   let Matches = [
     0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1,
     0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,

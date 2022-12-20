@@ -12,6 +12,12 @@ import EditMatches from "./Components/Managers/EditMatches";
 import AddStadium from "./Components/Managers/AddStadium";
 import AddMatch from "./Components/Managers/AddMatch";
 import VacantAndReservedSeats from "./Components/Managers/VacantAndReservedSeats";
+// customer
+import EditData from "./Components/Customers/EditData";
+import MatchesDetails_custopme from "./Components/Customers/MatchesDetails";
+import VacantSeats from "./Components/Customers/vacantSeats";
+import ReserveSeat from "./Components/Customers/ReserveSeat";
+import CancelReservation from "./Components/Customers/CancelReservation";
 
 // import react router
 import { Route, Routes } from "react-router-dom";
@@ -34,6 +40,19 @@ function App() {
         <Route
           path="/VacantAndReservedSeats"
           element={<VacantAndReservedSeats />}
+        />
+        {/* customer */}
+        <Route path="/EditData" element={<EditData />} />
+        <Route
+          path="/customer/match details"
+          element={<MatchesDetails_custopme />}
+        />
+        <Route path="/customer/vacant seats" element={<VacantSeats />} />
+        <Route path="/customer/vacant seats" element={<VacantSeats />} />
+        <Route path="/customer/Reserve Seat" element={<ReserveSeat />} />
+        <Route
+          path="/customer/Cancel Reservation"
+          element={<CancelReservation />}
         />
       </Routes>
     </div>
