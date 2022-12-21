@@ -43,4 +43,21 @@ router.patch('/approveuser/:username',async (req,res,next) => {
     }
 });
 
+router.patch('/updateuser/:username',async (req,res,next) => {
+    try{
+        await UserController.updateUser(req,res,next);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+});
+
+router.post('/reserve',async (req,res,next) => {
+    try{
+        await UserController.reserve(req,res,next);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+});
+
+
 module.exports = router;
