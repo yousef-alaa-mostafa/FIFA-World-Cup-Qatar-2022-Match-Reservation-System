@@ -78,9 +78,9 @@ const checkUsername = async (req,res,next) => {
         //check if the user already exists
         var user = await User.findOne({username:username});
         if(!user){
-            return res.status(400).json({message:'Username does not exist'});
+            return res.status(400).json({bool: 'false',message:'Username does not exist'});
         }
-        return res.status(201).send({ message:'Username exists'});
+        return res.status(200).send({ bool: 'true',message:'Username exists'});
     }catch(err){
         res.status(400).json({message:err.message});
     }

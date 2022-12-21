@@ -27,7 +27,7 @@ router.get('/pendingusers',async (req,res,next) => {
     }   
 });
 
-router.post('/deleteuser/:username',async (req,res,next) => {
+router.delete('/deleteuser/:username',async (req,res,next) => {
     try{
          await UserController.deleteUser(req,res,next);
     }catch(err){
