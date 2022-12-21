@@ -137,7 +137,7 @@ const updateUser = async (req,res,next) => {
         const {firstName,lastName,password,role,birthdate,nationality,gender,creditCardNumber}= req.body;
         const user = await User.updateOne({username:username},{$set:{firstName:firstName,lastName:lastName,password:password,
             role:role,birthdate:birthdate,nationality:nationality,gender:gender,creditCardNumber:creditCardNumber}});
-        if(!user){
+        if(user.matchedCount==0){
             return res.status(400).json({message:'User does not exist'});
         }
         return res.status(201).send({ message:'User updated'});
