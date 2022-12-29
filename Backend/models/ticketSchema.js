@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 const ticketSchema = new mongoose.Schema ({
     match: { type :mongoose.Schema.Types.ObjectId, ref: 'Match'},
     seat: {type :Number ,required :true,trim: true},
-    price: {type :Number ,required :true,trim: true},
+    //price: {type :Number ,required :true,trim: true},
     user: { type :mongoose.Schema.Types.ObjectId, ref: 'User'},
 },{timestamps: true});
 

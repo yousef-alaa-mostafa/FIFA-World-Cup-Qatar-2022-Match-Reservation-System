@@ -1,5 +1,6 @@
 const User = require('../models/userSchema');
 const Match = require('../models/matchSchema');
+const Ticket = require('../models/ticketSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -74,14 +75,14 @@ const loginUser = async (req,res,next) => {
 
 const checkUsername = async (req,res,next) => {
     try{
-        const {username}=req.body;
-        console.log(req.body);
-        //check if the user already exists
-        var user = await User.findOne({username:username});
+        const {username ,email}=req.body;
+        var user = await User.findOne({
+            $or:[{username:username},{email:email}]
+        });
         if(!user){
-            return res.status(400).json({bool: 'false',message:'Username does not exist'});
+            return res.status(400).json({bool: 'false',message:'User does not exist'});
         }
-        return res.status(200).send({ bool: 'true',message:'Username exists'});
+        return res.status(200).send({ bool: 'true',message:'User exists'});
     }catch(err){
         res.status(400).json({message:err.message});
     }
@@ -150,14 +151,42 @@ const reserve = async (req,res,next) => {
     try{
         const {username,match_id}=req.params;
         const {seatNumber,creditCardNumber,creditPinNumber}= req.body;
-        const user = await User.find({username:username});
+
+        if (!username || !match_id || !seatNumber || !creditCardNumber || !creditPinNumber){
+            return res.status(400).json({message:'Please fill all fields'});
+        }
+        //check if the user exists
+        const user = await User.findOne({username:username});
         if(!user){
             return res.status(400).json({message:'User does not exist'});
         }
+        //check if the match exists
         const match = await Match.findById(match_id);
         if(!match){
             return res.status(400).json({message:'Match does not exist'});
         }
+        //check if the seat is already reserved
+        reservedSeats = match.reservedSeats;
+        if (reservedSeats.includes(seatNumber)){
+            return res.status(400).json({message:'Seat already reserved'});
+        }
+        // add the seat to the reserved seats
+        reservedSeats.push(seatNumber);
+        //add the match to the user's matches
+        matches=user.matches;
+        matches.push(match_id);
+        //update the match
+        await Match.updateOne({_id:match_id},{$set:{reservedSeats:reservedSeats}});
+        //update the user
+        await User.updateOne({username:username},{$set:{creditCardNumber:creditCardNumber,matches:matches}});
+        // save the ticket
+        const ticket = new Ticket({
+            match:match._id,
+            seat:seatNumber,
+            user:user._id
+        });
+        await ticket.save();
+        return res.status(201).send({ message:'Ticket reserved'});
     }
     catch(err){
         res.status(400).json({message:err.message});

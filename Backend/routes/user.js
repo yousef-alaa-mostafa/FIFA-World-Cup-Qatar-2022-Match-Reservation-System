@@ -3,7 +3,7 @@ const router = express.Router();
 
 const UserController = require('../controllers/UserController');
 
-router.get('/checkusername',async (req,res,next) => {
+router.post('/checkusername',async (req,res,next) => {
     try{
          await UserController.checkUsername(req,res,next);
     }catch(err){
@@ -51,13 +51,7 @@ router.patch('/updateuser/:username',async (req,res,next) => {
     }
 });
 
-router.post('/reserve',async (req,res,next) => {
-    try{
-        await UserController.reserve(req,res,next);
-    }catch(err){
-        res.status(400).json({message:err.message});
-    }
-});
+
 
 
 module.exports = router;

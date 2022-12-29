@@ -9,6 +9,7 @@ const auth = require('./routes/auth');
 const user = require('./routes/user');
 const matches = require('./routes/matches');
 const stadiums = require('./routes/stadiums');
+const reservations = require('./routes/reservation');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/auth',auth);
 app.use('/user',user);
 app.use('/matches',matches);
 app.use('/stadiums',stadiums);
+app.use('/reservations',reservations);
 
 console.log("process.env.PORT: "+process.env.PORT)
 const port = process.env.PORT || 3000;
