@@ -4,6 +4,7 @@ import "./App.css";
 import Login from "./Components/Login/Login";
 import Signup from "./Components/Signup/Signup";
 import Home from "./Components/Guests/Home";
+// site admin
 import AllUsers from "./Components/SiteAdministrator/AllUsers";
 import NewUsers from "./Components/SiteAdministrator/NewUsers";
 // manager
@@ -23,6 +24,7 @@ import CancelReservation from "./Components/Customers/CancelReservation";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
+  let token = localStorage.getItem("token");
   return (
     <div className="App">
       <Routes>
@@ -30,9 +32,11 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        {/* site admin */}
         <Route path="/allUsers" element={<AllUsers />} />
         <Route path="/newusers" element={<NewUsers />} />
         {/* manager */}
+        <Route path="/manager" element={<MatchesDetails />} />
         <Route path="/MatchesDetails" element={<MatchesDetails />} />
         <Route path="/EditMatches" element={<EditMatches />} />
         <Route path="/AddStadium" element={<AddStadium />} />
@@ -42,7 +46,7 @@ function App() {
           element={<VacantAndReservedSeats />}
         />
         {/* customer */}
-        <Route path="/EditData" element={<EditData />} />
+        <Route path="/customer/EditData" element={<EditData />} />
         <Route
           path="/customer/match details"
           element={<MatchesDetails_custopme />}

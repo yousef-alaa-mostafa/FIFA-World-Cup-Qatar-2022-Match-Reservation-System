@@ -10,7 +10,7 @@ export default function navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <Link className="navbar-brand" to="/EditData">
+        <Link className="navbar-brand" to="/customer/match details">
           FIFA World Cup
         </Link>
         <button
@@ -37,11 +37,11 @@ export default function navbar() {
                 vacant seats
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink className="nav-link" to="/customer/Reserve Seat">
                 Reserve Seat
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink className="nav-link" to="/customer/Cancel Reservation">
                 Cancel Reservation
@@ -49,8 +49,13 @@ export default function navbar() {
             </li>
 
             <li className="nav-item ">
-              <NavLink className="nav-link" to="/EditData">
+              <NavLink className="nav-link" to="/customer/EditData">
                 Edit Data
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="nav-link" to="/login">
+                Logout
               </NavLink>
             </li>
           </ul>

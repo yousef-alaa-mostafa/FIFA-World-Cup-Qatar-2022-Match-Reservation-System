@@ -52,6 +52,11 @@ export default function navbar() {
                 Vacant And Reserved Seats
               </NavLink>
             </li>
+            <li>
+              <NavLink className="nav-link" to="/login">
+                Logout
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>

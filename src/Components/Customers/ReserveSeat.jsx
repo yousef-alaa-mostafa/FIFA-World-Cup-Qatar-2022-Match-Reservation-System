@@ -1,6 +1,11 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
+import axios from "axios";
+
+//API route
+import { Route_ } from "../Route";
+
 // used components
 import Navbar from "./Navbar.jsx";
 
@@ -14,16 +19,11 @@ import "react-dropdown/style.css";
 export default function ReserveSeat() {
   const [seat_, setSeat_] = useState("");
   const [MatchSeats, setMatchSeats] = useState([]);
+
   const AvailableSeats = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const [Matches, setMatches] = useState([]);
   const [chosenMatch, setChosenMatch] = useState("");
-  let Matches_ = [
-    "fff vs brtb",
-    "sdcsd vs wefwef",
-    "fff vs brtb",
-    "sdcsd vs wefwef",
-  ];
 
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
@@ -33,9 +33,24 @@ export default function ReserveSeat() {
   };
 
   useEffect(() => {
-    setMatches(Matches_);
+    (async () => {
+      let { data } = await axios.get(`${Route_}matches`);
+
+      // setMatches(data);
+      console.log(data);
+      let temp_matches = [];
+      let temp_matches_with_id = [{ key: "key", value: "value" }];
+      for (let i = 0; i < data.length; i++) {
+        temp_matches[i] =
+          data[i].team1 + " and " + data[i].team2 + " /" + data[i]._id;
+      }
+      setMatches(temp_matches);
+    })();
+
     setMatchSeats([]);
   }, []);
+
+  let i = 0;
 
   useEffect(() => {
     setMatchSeats(AvailableSeats);
@@ -57,7 +72,7 @@ export default function ReserveSeat() {
           <Dropdown
             options={Matches}
             onChange={(data) => {
-              setChosenMatch(data.value);
+              setChosenMatch(data.value.split("/")[1]);
             }}
             placeholder="Select Match"
           />
@@ -69,9 +84,18 @@ export default function ReserveSeat() {
             }}
             placeholder="Select seat ID"
           />
+          <br />
+          <input
+            className={style_.input}
+            placeholder="Enter Your credit card number"
+          />
+          <br />
+          <br />
+          <input className={style_.input} placeholder="Enter pin number" />
+          <br />
           {/*--------------------reserve ticket------------------------ */}
           <br />
-          <button onClick={handleClick}>Edit Match</button>
+          <button onClick={handleClick}>Reserve Seat</button>
         </div>
       </div>
     </div>

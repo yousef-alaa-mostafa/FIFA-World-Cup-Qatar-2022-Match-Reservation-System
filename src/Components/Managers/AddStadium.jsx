@@ -1,5 +1,10 @@
 import React, { useState, useRef } from "react";
 
+import axios from "axios";
+
+//API route
+import { Route_ } from "../Route";
+
 // used components
 import Navbar from "./Navbar.jsx";
 
@@ -8,13 +13,36 @@ import style_ from "./AddStadium.module.css";
 
 export default function AddStadium() {
   const errRef = useRef();
+  const successRef = useRef();
   const [errMsg, setErrMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const [StadiumName, setStadiumName] = useState("");
   const [StadiumImage, setStadiumImage] = useState("");
 
-  const handleClick = () => {
-    setErrMsg("Not complete");
+  const handleClick = async () => {
+    // setErrMsg("Not complete");
+    let newStadium = {
+      name: StadiumName,
+      location: "location",
+      capacity: "40",
+      image: StadiumImage,
+    };
+    const { data } = await axios.post(
+      `${Route_}stadiums/addstadium`,
+      newStadium,
+      {
+        validateStatus: false,
+      }
+    );
+    if (data.message === "Stadium already exists") {
+      setErrMsg(data.message);
+      setSuccessMsg("");
+    } else if (data.message === "Stadium added successfully") {
+      setSuccessMsg(data.message);
+      setErrMsg("");
+    }
+    console.log(data);
   };
 
   return (
@@ -26,23 +54,40 @@ export default function AddStadium() {
           <p ref={errRef} className={errMsg ? style_.errMsg : style_.offscreen}>
             {errMsg}
           </p>
+          {/*-------------------- successful ------------------------ */}
+          <p
+            ref={successRef}
+            className={successMsg ? style_.successMsg : style_.offscreen}
+          >
+            {successMsg}
+          </p>
           {/*--------------------stadium part------------------------ */}
           <input
             type={"text"}
             placeholder="Stadium name"
-            onChange={(data) => {
-              setStadiumName(data);
-            }}
+            onChange={(e) => setStadiumName(e.target.value)}
+            value={StadiumName}
           ></input>
           <br />
           <br />
           {/*--------------------stadium part------------------------ */}
-          <input
+          {/* <input
             type="file"
             accept="image/png, image/jpeg"
-            onChange={(data) => {
-              setStadiumName(data);
+            onChange={(e) => {
+              setStadiumImage(e.target.value);
+              console.log(e.target.value);
+              console.image(e.target.value);
             }}
+            value={StadiumImage}
+          /> */}
+          <input
+            type="text"
+            placeholder="Image url"
+            onChange={(e) => {
+              setStadiumImage(e.target.value);
+            }}
+            value={StadiumImage}
           />
           <br />
           {/*--------------------second Linesmen------------------------ */}

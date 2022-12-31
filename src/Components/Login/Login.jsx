@@ -2,6 +2,11 @@ import React from "react";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
+import axios from "axios";
+
+//API route
+import { Route_ } from "../Route";
+
 //used styles
 import style_ from "./Login.module.css";
 
@@ -17,16 +22,67 @@ export default function Login() {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
+  const [LoginRes, setLoginRes] = useState();
+
+  const client = axios.create({
+    baseURL: "http://localhost:3000",
+  });
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
 
+  const login_api_function = (username, password) => {
+    client
+      .post("", {
+        username: user,
+        password: pwd,
+      })
+      .then((response) => {
+        LoginRes((posts) => [response.data, ...posts]);
+      });
+  };
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, pwd);
-    setUser("");
-    setPwd("");
-    window.open("./", "_self");
+
+    let user_ = {
+      username: user,
+      password: pwd,
+    };
+
+    const { data } = await axios
+      .post("http://localhost:8000/auth/login", user_, {
+        validateStatus: false,
+      })
+
+      .catch(function (error) {
+        console.log(error.response.data); // this is the part you need that catches 400 request
+        // setErrMsg("User does not exist");
+      });
+    localStorage.setItem("username", user);
+    // let { data } = await axios.post("http://localhost:8000/auth/login", user_);
+
+    console.log(data);
+
+    if (data.message === "Successful User login") {
+      console.log(data.data.role);
+      if (data.data.role === "Manager") {
+        window.open("./MatchesDetails", "_self");
+      } else if (data.data.role === "Fan") {
+        window.open("./customer/match details", "_self");
+      } else if (data.data.role === "Admin") {
+        window.open("./allUsers", "_self");
+      }
+    } else if (data.message === "Invalid Password") {
+      setErrMsg("Invalid Password");
+    } else if (data.message === "User does not exist") {
+      setErrMsg("User does not exist");
+    }
+
+    // setUser("");
+    // setPwd("");
+    // window.open("./", "_self");
   };
 
   return (
@@ -69,10 +125,10 @@ export default function Login() {
                 id="password"
                 onChange={(e) => setPwd(e.target.value)}
                 value={pwd}
-                required
+                // required
               ></input>
 
-              <button type="submit" class="btn btn-danger">
+              <button type="submit" className="btn btn-danger">
                 Sign In
               </button>
             </form>

@@ -1,6 +1,11 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
+import axios from "axios";
+
+//API route
+import { Route_ } from "../Route";
+
 // used components
 import Navbar from "./Navbar.jsx";
 
@@ -19,6 +24,9 @@ export default function EditMatches() {
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
 
+  const [successMsg, setSuccessMsg] = useState("");
+  const successRef = useRef();
+
   const [Matches, setMatches] = useState("");
 
   const MatchesOptions = [
@@ -28,41 +36,115 @@ export default function EditMatches() {
   ];
 
   const [Stadiums, setStadiums] = useState("");
-  const StadiumsOptions = [
+  const [StadiumsOptions, setStadiumsOptions] = useState([
+    "Lusail Stadium",
+    "Ahmad Bin Ali Stadium",
     "Daniel Siebert",
-    "Daniel Siebert",
-    "Daniel Siebert",
-  ];
+  ]);
 
   const [Match_Date, set_Match_Date] = useState(new Date());
-  const [day_, setDay_] = useState();
-  const [month_, setmonth_] = useState();
-  const [year, setyear] = useState();
+  const [day_, setDay_] = useState("");
+  const [month_, setmonth_] = useState("");
+  const [year, setyear] = useState("");
 
   const [MainReferee, setMainReferee] = useState("");
   const MainRefereeOptions = [
-    "Fernando Rapallini",
-    "Fernando Rapallini",
-    "Fernando Rapallini",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
   const [FirstLinesman, setFirstLinesman] = useState("");
   const FirstLinesmanOptions = [
-    "Wilton Sampaio",
-    "Wilton Sampaio",
-    "Wilton Sampaio",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
   const [SecondLinesman, setSecondLinesman] = useState("");
   const SecondLinesmanOptions = [
-    "Daniel Siebert",
-    "Daniel Siebert",
-    "Daniel Siebert",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
-  const handleClick = () => {
-    setErrMsg("Not complete");
+  const [MatchSeats, setMatchSeats] = useState([]);
+  const [chosenMatch, setChosenMatch] = useState("");
+
+  const handleClick = async () => {
+    let tempDate = year + "/" + month_ + "/" + day_;
+    console.log(day_);
+    if (year.length === 0) {
+      tempDate = 0;
+    }
+    let updatedMatch = {
+      stadium: Stadiums,
+      date: tempDate,
+      lineman1: FirstLinesman,
+      lineman2: SecondLinesman,
+      referee: MainReferee,
+    };
+
+    if (chosenMatch.length > 0) {
+      const { data } = await axios.patch(
+        `${Route_}matches/editmatch/${chosenMatch}`,
+        updatedMatch,
+        { validateStatus: false }
+      );
+      console.log(data);
+      if (data.message !== "match updated") {
+        setErrMsg(data.message);
+      } else if (data.message === "match updated") {
+        setSuccessMsg("match updated");
+        setErrMsg("");
+      }
+    } else {
+      setErrMsg("chose match");
+    }
   };
+
+  useEffect(() => {
+    (async () => {
+      let { data } = await axios.get(`${Route_}matches`);
+      axios
+        .get("http://localhost:8000/stadiums/getstadiums")
+        .then((response) => {
+          // console.log(response.data);
+          let res = response.data;
+          let arr = [];
+          for (let i = 0; i < res.length; i++) {
+            arr.push(res[i].name);
+          }
+          setStadiumsOptions(arr);
+          console.log(arr);
+        });
+
+      let temp_matches = [];
+      let temp_matches_with_id = [{ key: "key", value: "value" }];
+      for (let i = 0; i < data.length; i++) {
+        temp_matches[i] =
+          data[i].team1 + " and " + data[i].team2 + " /" + data[i]._id;
+      }
+      setMatches(temp_matches);
+    })();
+
+    setMatchSeats([]);
+  }, []);
 
   return (
     <div className={style_.main_Container}>
@@ -73,14 +155,22 @@ export default function EditMatches() {
           <p ref={errRef} className={errMsg ? style_.errMsg : style_.offscreen}>
             {errMsg}
           </p>
+          {/*------------------success------------------ */}
+          <p
+            ref={successRef}
+            className={successMsg ? style_.successMsg : style_.offscreen}
+          >
+            {successMsg}
+          </p>
           {/*--------------------Match part------------------------ */}
           <br />
           <Dropdown
-            options={MatchesOptions}
+            options={Matches}
             onChange={(data) => {
-              setMatches(data.value);
+              setChosenMatch(data.value.split("/")[1]);
+              console.log(data.value.split("/")[1]);
             }}
-            placeholder="Select match"
+            placeholder="Select Match"
           />
 
           {/*--------------------Stadium part------------------------ */}

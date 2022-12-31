@@ -7,7 +7,7 @@ export default function navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <Link className="navbar-brand" to="/Home">
+        <Link className="navbar-brand" to="/allUsers">
           FIFA World Cup
         </Link>
         <button
@@ -32,6 +32,11 @@ export default function navbar() {
             <li className="nav-item">
               <NavLink className="nav-link" to="/newusers">
                 New users
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/login">
+                Logout
               </NavLink>
             </li>
           </ul>

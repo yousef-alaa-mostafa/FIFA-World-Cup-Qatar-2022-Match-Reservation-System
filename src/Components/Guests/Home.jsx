@@ -1,4 +1,7 @@
 import React from "react";
+import { useEffect, useState, useRef } from "react";
+
+import axios from "axios";
 
 // used components
 import Navbar from "./Navbar.jsx";
@@ -8,6 +11,9 @@ import style_ from "./Home.module.css";
 
 //import stadiums images
 import AlJanoub_Stadium from "./stadiums/aljanoub-stadium.jpg";
+
+//API route
+import { Route_ } from "../Route";
 
 export default function Home() {
   let match = {
@@ -20,57 +26,70 @@ export default function Home() {
     second_Linesmen: "Daniel Siebert",
   };
   let Matches = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  return (
-    <div className={style_.main_Container}>
-      <Navbar />
-      <div>
-        <div className="container my-5" style={{ margin: "0px !important" }}>
-          <div className="row">
-            <div className="col-md-4">
-              <div className={style_.leftTrending}>
-                <hr className={style_.hr1} />
-                <h2>
-                  All
-                  <br />
-                  Matches
-                  <br />
-                  Details to review
-                </h2>
-                <p>to reserve a ticket you shoud register</p>
-                <hr className={style_.hr2} />
-              </div>
-            </div>
 
-            {Matches.map((value, index) => {
-              return (
-                <div
-                  key={index}
-                  className="col-md-4 my-3"
-                  id={style_.matchContainer}
-                >
-                  <div className="item" id={style_.movies}>
-                    <img className="w-100" src={AlJanoub_Stadium}></img>
-                    <ul>
-                      <li>{match.team1 + " vs " + match.team2}</li>
+  const [Matches_, setMatches] = useState();
 
-                      <li>{"at " + match.second_Linesmen}</li>
-                      <li>{"Date is " + match.date}</li>
-                      <li>{"the main referee is " + match.Main_Referee}</li>
-                      <li>
-                        {"the Two Linesmen are " +
-                          match.first_Linesmen +
-                          " and " +
-                          match.second_Linesmen}
-                      </li>
-                    </ul>
-                  </div>
+  useEffect(() => {
+    (async () => {
+      let { data } = await axios.get(`${Route_}matches`);
+      setMatches(data);
+    })();
+  }, []);
+
+  if (Matches_ != undefined) {
+    console.log(Matches_);
+    return (
+      <div className={style_.main_Container}>
+        <Navbar />
+        <div>
+          <div className="container my-5" style={{ margin: "0px !important" }}>
+            <div className="row">
+              <div className="col-md-4">
+                <div className={style_.leftTrending}>
+                  <hr className={style_.hr1} />
+                  <h2>
+                    All
+                    <br />
+                    Matches
+                    <br />
+                    Details to review
+                  </h2>
+                  <p>to reserve a ticket you shoud register</p>
+                  <hr className={style_.hr2} />
                 </div>
-              );
-            })}
+              </div>
+
+              {Matches_.map((value, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="col-md-4 my-3"
+                    id={style_.matchContainer}
+                  >
+                    <div className="item" id={style_.movies}>
+                      <img className="w-100" src={value.stadium.image}></img>
+                      <ul>
+                        <li>{value.team1 + " vs " + value.team2}</li>
+
+                        <li>{"at " + value.stadium.name}</li>
+                        <li>{"Date is " + value.date}</li>
+                        <li>{"the main referee is " + value.referee}</li>
+                        <li>
+                          {"the Two Linesmen are " +
+                            value.lineman1 +
+                            " and " +
+                            value.lineman2}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+          <br />
         </div>
-        <br />
       </div>
-    </div>
-  );
+    );
+  }
 }

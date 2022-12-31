@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 //used styles
 import style_ from "./Signup.module.css";
@@ -35,6 +36,8 @@ import { data } from "jquery";
 export default function Signup() {
   const userRef = useRef();
   const errRef = useRef();
+
+  const [errMsg, setErrMsg] = useState("");
 
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false); // is name valid or not
@@ -107,19 +110,54 @@ export default function Signup() {
 
   //for testing
   useEffect(() => {
-    console.log(day_ + "/" + month_ + "/" + year);
+    // console.log(day_ + "/" + month_ + "/" + year);
   }, [Birth_Date]);
   useEffect(() => {
-    console.log(Gender);
+    // console.log(Gender);
   }, [Gender]);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    if (validName && validPwd && validMatch) {
-      setUser("");
-      setPwd("");
-      setMatchPwd("");
-      window.open("./", "_self");
+    let user_ = {
+      firstName: first_name,
+      lastName: last_name,
+      username: user,
+      password: pwd,
+      email: Email,
+      birthdate: year + "/" + month_ + "/" + day_,
+      gneder: Gender,
+      role: Role,
+    };
+    console.log(Role);
+
+    if (validName && validPwd && validMatch && year && Role && Gender) {
+      console.log(year);
+      let { data } = await axios.post(
+        "http://localhost:8000/auth/signup",
+        user_,
+        { validateStatus: false }
+      );
+      localStorage.setItem("username", user);
+      if (data.message === "Successful User signUp") {
+        if (data.data.role === "Manager") {
+          window.open("./MatchesDetails", "_self");
+        } else if (data.data.role === "Fan") {
+          window.open("./customer/match details", "_self");
+        } else if (data.data.role === "Admin") {
+          window.open("./allUsers", "_self");
+        }
+        // setUser("");
+        // setPwd("");
+        // setMatchPwd("");
+      } else if (!pwd || !matchPwd) {
+        setErrMsg("Enter password and match password");
+      } else if (!year) {
+        setErrMsg("Enter your birthdate");
+      } else if (!Role) {
+        setErrMsg("Enter your role");
+      } else if (!Gender) {
+        setErrMsg("Enter your gender");
+      }
     }
   };
 
@@ -139,8 +177,14 @@ export default function Signup() {
           id={style_.form}
         >
           <section>
+            <p
+              ref={errRef}
+              className={errMsg ? style_.errMsg : style_.offscreen}
+            >
+              {errMsg}
+            </p>
             <h1>Sign Up</h1>
-            <form onSubmit={HandleSubmit}>
+            <form>
               <form style={{ display: step1_desp }}>
                 {/*-------------------- first and last name part------------------------ */}
                 <label>
@@ -252,7 +296,22 @@ export default function Signup() {
                 <button
                   type="button"
                   className="btn btn-danger"
-                  onClick={() => {
+                  onClick={async () => {
+                    console.log(user);
+                    let user_data = { username: user, email: Email };
+                    let user_exist = true;
+
+                    const { data } = await axios.post(
+                      "http://localhost:8000/user/checkusername",
+                      user_data,
+                      { validateStatus: false }
+                    );
+                    // .catch(function (error) {
+                    //   console.log(error.response.data); // this is the part you need that catches 400 request
+                    //   data.message = error.response.data;
+                    // });
+
+                    console.log(data.message);
                     if (
                       first_name &&
                       last_name &&
@@ -260,16 +319,20 @@ export default function Signup() {
                       validName &&
                       validEmail &&
                       Email &&
-                      Nationality
+                      Nationality &&
+                      data.message === "User does not exist"
                     ) {
                       setStep1_desp("none");
                       setStep2_desp("");
+                      setErrMsg("");
                     } else if (!validName) {
-                      alert("Enter valid username");
+                      setErrMsg("Enter valid username");
                     } else if (!validEmail) {
-                      alert("Enter valid email");
+                      setErrMsg("Enter valid email");
+                    } else if (data.message === "User exists") {
+                      setErrMsg(data.message);
                     } else {
-                      alert("all fields are required");
+                      setErrMsg("all fields are required");
                     }
                   }}
                 >
@@ -398,8 +461,8 @@ export default function Signup() {
                 >
                   previous
                 </button>
-                <button type="submit" className="btn btn-danger">
-                  Sign In
+                <button onClick={HandleSubmit} className="btn btn-danger">
+                  Sign Up
                 </button>
               </form>
             </form>

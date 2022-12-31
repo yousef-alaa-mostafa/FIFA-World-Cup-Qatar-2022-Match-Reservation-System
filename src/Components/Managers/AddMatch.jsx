@@ -1,6 +1,11 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
+import axios from "axios";
+
+//API route
+import { Route_ } from "../Route";
+
 // used components
 import Navbar from "./Navbar.jsx";
 
@@ -23,12 +28,11 @@ export default function AddMatch() {
   const [secondCountry, setSecondCountry] = useState("");
 
   const [Stadiums, setStadiums] = useState("");
-  const StadiumsOptions = [
+  const [StadiumsOptions, setStadiumsOptions] = useState([
+    "Lusail Stadium",
+    "Ahmad Bin Ali Stadium",
     "Daniel Siebert",
-    "Daniel Siebert",
-    "Daniel Siebert",
-  ];
-
+  ]);
   const [Match_Date, set_Match_Date] = useState(new Date());
   const [day_, setDay_] = useState();
   const [month_, setmonth_] = useState();
@@ -36,28 +40,84 @@ export default function AddMatch() {
 
   const [MainReferee, setMainReferee] = useState("");
   const MainRefereeOptions = [
-    "Fernando Rapallini",
-    "Fernando Rapallini",
-    "Fernando Rapallini",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
   const [FirstLinesman, setFirstLinesman] = useState("");
   const FirstLinesmanOptions = [
-    "Wilton Sampaio",
-    "Wilton Sampaio",
-    "Wilton Sampaio",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
   const [SecondLinesman, setSecondLinesman] = useState("");
   const SecondLinesmanOptions = [
-    "Daniel Siebert",
-    "Daniel Siebert",
-    "Daniel Siebert",
+    "Kim Milton Nielsen",
+    "Sandor Puhl",
+    "Michel Vautrot",
+    "Pedro Proenca",
+    "Howard Webb",
+    "Markus Merk",
+    "Oscar Ruiz",
+    "Frank De Bleeckere",
   ];
 
-  const handleClick = () => {
-    setErrMsg("Not complete");
+  const handleClick = async () => {
+    // setErrMsg("Not complete");
+    let match_date = "";
+    if (year && month_ && day_) {
+      match_date = year + "/" + month_ + "/" + day_;
+    }
+    let newMatch = {
+      team1: FirstCountry,
+      team2: secondCountry,
+      stadium: Stadiums,
+      date: match_date,
+      time: "time",
+      lineman1: FirstLinesman,
+      lineman2: SecondLinesman,
+      referee: MainReferee,
+    };
+    // console.log(newMatch);
+
+    const { data } = await axios.post(`${Route_}matches/addmatch`, newMatch, {
+      validateStatus: false,
+    });
+    // .catch(function (error) {
+    //   console.log(error.response.data); // this is the part you need that catches 400 request
+    //   // setErrMsg("User does not exist");
+    // });
+    console.log(data);
   };
+
+  useEffect(() => {
+    (async () => {
+      axios
+        .get("http://localhost:8000/stadiums/getstadiums")
+        .then((response) => {
+          // console.log(response.data);
+          let res = response.data;
+          let arr = [];
+          for (let i = 0; i < res.length; i++) {
+            arr.push(res[i].name);
+          }
+          setStadiumsOptions(arr);
+          console.log(arr);
+        });
+    })();
+  }, []);
 
   return (
     <div className={style_.main_Container}>
@@ -72,18 +132,16 @@ export default function AddMatch() {
           <input
             type={"text"}
             placeholder="First country"
-            onChange={(data) => {
-              setFirstCountry(data);
-            }}
+            onChange={(e) => setFirstCountry(e.target.value)}
+            value={FirstCountry}
           ></input>
           <br />
           <br />
           <input
             type={"text"}
             placeholder="Second country"
-            onChange={(data) => {
-              setSecondCountry(data);
-            }}
+            onChange={(e) => setSecondCountry(e.target.value)}
+            value={secondCountry}
           ></input>
           <br />
           {/*--------------------Stadium part------------------------ */}

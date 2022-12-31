@@ -1,11 +1,16 @@
 .main_Container {
   background-color: #131722;
+  /* background: url("../images/bg.jpg") no-repeat center center fixed;
+  background-size: cover; */
+  /* background-repeat: no-repeat;
+  background-position: center; */
+
   font-family: "Montserrat Alternates", sans-serif;
   color: white;
   margin: 0;
   box-sizing: border-box;
   padding: 0;
-  min-height: 100%;
+  min-height: 720px;
 }
 
 .setterHolder {
@@ -26,6 +31,17 @@
   border-radius: 5px;
 }
 
+.input {
+  width: 350px;
+  height: 45px;
+  border-radius: 5px;
+  padding-left: 10px;
+  font: 1rem sans-serif;
+}
+.input::placeholder {
+  font: 1rem sans-serif;
+}
+
 .errMsg {
   background-color: lightpink;
   color: firebrick;
@@ -37,4 +53,22 @@
 .offscreen {
   position: absolute;
   left: -8888888px;
+}
+
+.seat {
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 5px;
+  text-shadow: 2px 2px 4px #000000;
+  box-shadow: 0px 1px 2px 0px rgba(0, 255, 255, 0.7),
+    1px 2px 4px 0px rgba(0, 255, 255, 0.7),
+    2px 4px 8px 0px rgba(0, 255, 255, 0.7),
+    2px 4px 16px 0px rgba(0, 255, 255, 0.7);
+}
+
+.seat:hover {
+  opacity: 0.7 !important;
 }
