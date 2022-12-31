@@ -107,7 +107,12 @@ const editMatch = async (req, res) => {
     try {
         const updatedMatch = await Match.updateOne({ _id: id }, {$set: {team1: team1, team2: team2, 
             stadium: stadium._id, date: date, time: time, lineman1: lineman1, lineman2: lineman2, referee: referee}});
-        res.status(200).json(updatedMatch);
+        if (updatedMatch.modifiedCount == 1) {
+            res.status(200).json({ message: 'match updated' });
+        }
+        else {
+            res.status(400).json({ message: 'match not updated' });
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
