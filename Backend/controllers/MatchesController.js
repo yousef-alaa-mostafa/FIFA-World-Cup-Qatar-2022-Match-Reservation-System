@@ -112,8 +112,29 @@ const editMatch = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 };
+const getReservedSeats = async (req, res) => {
+    const {match_id} = req.params;
+    const match = await Match.findById(match_id);
+    if (!match) {
+        return res.status(400).json({ message: 'match not found' });
+    }
+    reservedSeats=match.reservedSeats;
+    // create array of boolean to represent the seats
+    var seats = new Array(100);
+    for (var i = 0; i < 100; i++) {
+        if (reservedSeats.includes(i)) {
+            seats[i] = 1;
+        }
+        else {
+            seats[i] = 0;
+        }
+    }
+    return res.status(200).json(seats);
+
+};
 
 
 exports.getMatches = getMatches;
 exports.addMatch = addMatch;
 exports.editMatch = editMatch;
+exports.getReservedSeats = getReservedSeats;

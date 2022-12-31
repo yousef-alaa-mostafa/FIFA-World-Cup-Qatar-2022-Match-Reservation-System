@@ -24,5 +24,12 @@ router.patch('/editmatch/:id', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+router.get('/reservedseats/:match_id', async (req ,res)=>{
+    try{
+        await MatchesController.getReservedSeats(req,res);
+    }catch(err){
+        res.status(500).json({message:err.message});
+    }
+});
 
 module.exports = router;

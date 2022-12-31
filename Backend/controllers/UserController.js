@@ -151,7 +151,7 @@ const reserve = async (req,res,next) => {
     try{
         const {username,match_id}=req.params;
         const {seatNumber,creditCardNumber,creditPinNumber}= req.body;
-
+        
         if (!username || !match_id || !seatNumber || !creditCardNumber || !creditPinNumber){
             return res.status(400).json({message:'Please fill all fields'});
         }
@@ -167,26 +167,45 @@ const reserve = async (req,res,next) => {
         }
         //check if the seat is already reserved
         reservedSeats = match.reservedSeats;
-        if (reservedSeats.includes(seatNumber)){
-            return res.status(400).json({message:'Seat already reserved'});
+        for (i=0; i<seatNumber.length; i++){
+            if (reservedSeats.includes(seatNumber[i])){
+                return res.status(400).json({message:'Seat already reserved'});
+            }
+            // add the seat to the reserved seats
+            reservedSeats.push(seatNumber[i]);
         }
-        // add the seat to the reserved seats
-        reservedSeats.push(seatNumber);
+        
+        
         //add the match to the user's matches
         matches=user.matches;
+        //if the user has already reserved a ticket for this match
+        if (!matches.includes(match_id)){
         matches.push(match_id);
+        }
         //update the match
         await Match.updateOne({_id:match_id},{$set:{reservedSeats:reservedSeats}});
         //update the user
         await User.updateOne({username:username},{$set:{creditCardNumber:creditCardNumber,matches:matches}});
-        // save the ticket
-        const ticket = new Ticket({
-            match:match._id,
-            seat:seatNumber,
-            user:user._id
-        });
-        await ticket.save();
-        return res.status(201).send({ message:'Ticket reserved'});
+        // if user has a ticket for this match add the seats to the ticket
+        const ticket = await Ticket.findOne({match:match_id,user:user._id});
+        console.log(ticket)
+        if (ticket){
+            seats = ticket.seat;
+            for (i=0; i<seatNumber.length; i++){
+                seats.push(seatNumber[i]);
+            }
+            await Ticket.updateOne({match:match_id,user:user._id},{$set:{seat:seats}});
+            return res.status(201).send({ message:'Ticket reserved'});
+        }else{
+            // save the ticket
+            const ticket = new Ticket({
+                match:match_id,
+                seat:seatNumber,
+                user:user._id
+            });
+            await ticket.save();
+            return res.status(201).send({ message:'Ticket reserved'});
+        }
     }
     catch(err){
         res.status(400).json({message:err.message});
