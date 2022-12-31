@@ -19,4 +19,12 @@ router.post('/cancel/:username/:match_id',async (req,res,next) => {
     }
 
 });
+
+router.get('/getreservations/:username/:match_id',async (req,res,next) => {
+    try{
+        await UserController.getReservations(req,res,next);
+    }catch(err){
+        res.status(400).json({message:err.message});
+    }
+});
 module.exports = router;

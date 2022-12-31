@@ -212,6 +212,35 @@ const reserve = async (req,res,next) => {
     }
 };
 
+const getReservations = async (req,res,next) => {
+    try{
+        const {username,match_id}=req.params;
+        if (!username || !match_id){
+            return res.status(400).json({message:'Please fill all fields'});
+        }
+        //check if the user exists
+        const user = await User.findOne({username:username});
+        if(!user){
+            return res.status(400).json({message:'User does not exist'});
+        }
+        //check if the match exists
+        const match = await Match.findById(match_id);
+        if(!match){
+            return res.status(400).json({message:'Match does not exist'});
+        }
+        //check if the user has a ticket for this match
+        const ticket = await Ticket.findOne({match:match_id,user:user._id});
+        if(!ticket){
+            return res.status(400).json({message:'User has no ticket for this match'});
+        }
+        //return the seats
+        return res.status(201).send({ seats:ticket.seat});
+    }
+    catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
 const cancel = async (req,res,next) => {
     try{
         const {username,match_id}=req.params;
@@ -287,4 +316,5 @@ exports.deleteUser = deleteUser;
 exports.approveUser = approveUser;
 exports.updateUser = updateUser;
 exports.reserve = reserve;
+exports.getReservations = getReservations;
 exports.cancel = cancel;
