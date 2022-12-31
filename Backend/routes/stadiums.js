@@ -10,5 +10,13 @@ router.post('/addstadium', async (req, res) => {
     }
 });
 
+router.get('/getstadiums', async (req, res) => {
+    try {
+        await StadiumsController.getStadiums(req, res);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 
 module.exports = router;

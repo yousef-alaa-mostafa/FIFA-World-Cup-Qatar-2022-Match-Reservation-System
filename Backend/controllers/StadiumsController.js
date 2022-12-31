@@ -20,4 +20,14 @@ const addStadium = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 };
+
+const getStadiums = async (req, res) => {
+    try {
+        const stadiums = await Stadium.find();
+        res.status(200).json(stadiums);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
 exports.addStadium = addStadium;
+exports.getStadiums = getStadiums;
