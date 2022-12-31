@@ -11,7 +11,7 @@ router.post('/reserve/:username/:match_id',async (req,res,next) => {
     }
 
 });
-router.post('/cancel',async (req,res,next) => {
+router.post('/cancel/:username/:match_id',async (req,res,next) => {
     try{
         await UserController.cancel(req,res,next);
     }catch(err){

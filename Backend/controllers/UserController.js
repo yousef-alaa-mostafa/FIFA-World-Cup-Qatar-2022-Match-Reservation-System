@@ -212,6 +212,72 @@ const reserve = async (req,res,next) => {
     }
 };
 
+const cancel = async (req,res,next) => {
+    try{
+        const {username,match_id}=req.params;
+        //array of seat numbers
+        const {seatNumber}= req.body;
+        if (!username || !match_id || !seatNumber){
+            return res.status(400).json({message:'error'});
+        }
+        //check if the user exists
+        const user = await User.findOne({username:username});
+        if(!user){
+            return res.status(400).json({message:'User does not exist'});
+        }
+        //check if the match exists
+        const match = await Match.findById(match_id);
+        if(!match){
+            return res.status(400).json({message:'Match does not exist'});
+        }
+        //check if the seats are reserved by same user
+        const ticket = await Ticket.findOne({match:match_id,user:user._id});
+        if(!ticket){
+            return res.status(400).json({message:'Seat is not reserved by this user'});
+        }
+        //remove the seat from the reserved seats
+        reservedSeats = match.reservedSeats;
+        //loop through the two arrays and remove the seat
+        for (var i = 0; i <= seatNumber.length; i++) {
+            if (reservedSeats.includes(seatNumber[i])) {
+                reservedSeats.splice(reservedSeats.indexOf(seatNumber[i]),1);
+            }
+        }
+        matches=user.matches; 
+        //update the match
+        await Match.updateOne({_id:match_id},{$set:{reservedSeats:reservedSeats}});
+        //update the user
+        await User.updateOne({username:username},{$set:{matches:matches}});
+        // remove deleted seat from ticket
+        seats = ticket.seat;
+        //loop through the array and remove the seat
+        for (var i = 0; i <= seatNumber.length; i++) {
+            if (seats.includes(seatNumber[i])) {
+                seats.splice(seats.indexOf(seatNumber[i]),1);
+            }
+        }
+        //if the ticket is empty, delete it
+        if(ticket.seat.length==0){
+            await Ticket.deleteOne({_id:ticket._id});
+        }
+        else{
+            await Ticket.updateOne({_id:ticket._id},{$set:{seat:ticket.seat}});
+        }
+        //if the user has no more tickets for this match, remove the match from the user's matches
+        const ticket2 = await Ticket.findOne({match:match_id,user:user._id});
+        if(!ticket2){
+            matches=user.matches;
+            matches.splice(matches.indexOf(match_id),1);
+            await User.updateOne({username:username},{$set:{matches:matches}});
+        }
+        return res.status(201).send({ message:'Ticket(s) cancelled'});
+    }
+    catch(err){
+        res.status(400).json({message:err.message});
+    }
+};
+
+
 exports.createUser = createUser;
 exports.loginUser = loginUser;
 exports.checkUsername = checkUsername;
@@ -221,3 +287,4 @@ exports.deleteUser = deleteUser;
 exports.approveUser = approveUser;
 exports.updateUser = updateUser;
 exports.reserve = reserve;
+exports.cancel = cancel;
