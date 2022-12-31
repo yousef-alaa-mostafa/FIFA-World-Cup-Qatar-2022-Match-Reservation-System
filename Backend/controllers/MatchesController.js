@@ -51,19 +51,55 @@ const addMatch = async (req, res) => {
 
 const editMatch = async (req, res) => {
     const {id} = req.params;
-    const match = await Match.findById(id);
+    const match = await Match.findById(id); 
     var { team1, team2, stadium, date, time, lineman1, lineman2 ,referee } = match;
     if (!match) {
         return res.status(400).json({ message: 'match not found' });
     }
-    req.body.team1 != null ? team1 = req.body.team1 : team1 = team1;
-    req.body.team2 != null ? team2 = req.body.team2 : team2 = team2;
-    req.body.date != null ? date = req.body.date : date = date;
-    req.body.time != null ? time = req.body.time : time = time;
-    req.body.lineman1 != null ? lineman1 = req.body.lineman1 : lineman1 = lineman1;
-    req.body.lineman2 != null ? lineman2 = req.body.lineman2 : lineman2 = lineman2;
-    req.body.referee != null ? referee = req.body.referee : referee = referee;
-    if (req.body.stadium != null){
+    //check if not null or ""
+    if (req.body.team1 != null && req.body.team1 != ""){
+        team1 = req.body.team1;
+    }
+    else {
+        team1 = team1;
+    }
+    if (req.body.team2 != null && req.body.team2 != ""){
+        team2 = req.body.team2;
+    }
+    else {
+        team2 = team2;
+    }
+    if (req.body.date != null && req.body.date != ""){
+        date = req.body.date;
+    }
+    else {
+        date = date;
+    }
+    if (req.body.time != null && req.body.time != ""){
+        time = req.body.time;
+    }
+    else {
+        time = time;
+    }
+    if (req.body.lineman1 != null && req.body.lineman1 != ""){
+        lineman1 = req.body.lineman1;
+    }
+    else {
+        lineman1 = lineman1;
+    }
+    if (req.body.lineman2 != null && req.body.lineman2 != ""){
+        lineman2 = req.body.lineman2;
+    }
+    else {
+        lineman2 = lineman2;
+    }
+    if (req.body.referee != null && req.body.referee != ""){
+        referee = req.body.referee;
+    }
+    else {
+        referee = referee;
+    }
+    if (req.body.stadium != null && req.body.stadium != ""){
         const dbstadium = await Stadium.findOne({ name : req.body.stadium }).select({"_id":1});
         if (!dbstadium) {
             return res.status(400).json({ message: 'stadium not found' });
@@ -117,6 +153,7 @@ const editMatch = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 };
+
 const getReservedSeats = async (req, res) => {
     const {match_id} = req.params;
     const match = await Match.findById(match_id);
