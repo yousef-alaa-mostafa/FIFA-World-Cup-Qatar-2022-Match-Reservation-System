@@ -140,6 +140,8 @@ const updateUser = async (req,res,next) => {
     try{
         const {username}=req.params;
         var {firstName,lastName,password,role,birthdate,nationality,gender,creditCardNumber}= req.body;
+        if (firstName == "" || lastName == "" || password == "" || role == "" || birthdate == "" || nationality == "" || gender== "" || creditCardNumber == "")
+            return res.status(400).json({message:'empty field sent'});
         //if password changed hash it
         if(password){
             const salt = await bcrypt.genSalt(10);
