@@ -141,6 +141,10 @@ const editMatch = async (req, res) => {
     }
             
     try {
+        //if all null or "" return the same match
+        if (team1 == match.team1 && team2 == match.team2 && stadium == match.stadium && date == match.date && time == match.time && lineman1 == match.lineman1 && lineman2 == match.lineman2 && referee == match.referee) {
+            return res.status(400).json({ message: 'Nothing is changed' });
+        }
         const updatedMatch = await Match.updateOne({ _id: id }, {$set: {team1: team1, team2: team2, 
             stadium: stadium._id, date: date, time: time, lineman1: lineman1, lineman2: lineman2, referee: referee}});
         if (updatedMatch.modifiedCount == 1) {

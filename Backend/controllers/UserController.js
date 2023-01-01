@@ -60,6 +60,10 @@ const loginUser = async (req,res,next) => {
         if(!validPassword){
             return res.status(203).json({message:'Invalid Password'});
         }
+        //if user is a manager and not approved
+        if(user.role=='Manager' && !user.approved){
+            return res.status(203).json({message:'Manager not approved'});
+        }
         // create a token
         const token = user.generateJWT();
         return res.status(202).header('x-auth-token',token).send({
@@ -135,7 +139,12 @@ const approveUser = async (req,res,next) => {
 const updateUser = async (req,res,next) => {
     try{
         const {username}=req.params;
-        const {firstName,lastName,password,role,birthdate,nationality,gender,creditCardNumber}= req.body;
+        var {firstName,lastName,password,role,birthdate,nationality,gender,creditCardNumber}= req.body;
+        //if password changed hash it
+        if(password){
+            const salt = await bcrypt.genSalt(10);
+            password = await bcrypt.hash(password,salt);
+        }
         const user = await User.updateOne({username:username},{$set:{firstName:firstName,lastName:lastName,password:password,
             role:role,birthdate:birthdate,nationality:nationality,gender:gender,creditCardNumber:creditCardNumber}});
         if(user.matchedCount==0){
