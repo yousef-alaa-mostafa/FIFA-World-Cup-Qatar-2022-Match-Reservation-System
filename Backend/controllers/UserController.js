@@ -323,9 +323,24 @@ const cancel = async (req,res,next) => {
         }
         //check if the seats are reserved by same user
         const ticket = await Ticket.findOne({match:match_id,user:user._id});
-        if(!ticket){
+        if(!ticket || !ticket.seat.includes(seatNumber)){
             return res.status(400).json({message:'Seat is not reserved by this user'});
         }
+        // check if the match date is in the coming 3 days
+        const today = new Date();
+        const day= today.getDate();
+        const month = today.getMonth();
+        const year = today.getFullYear();
+
+        const matchMonth = match.date.getMonth();
+        const matchDay = match.date.getDate()-1;
+        const matchYear = match.date.getFullYear();
+
+        
+        if (matchDay - day <= 3 && matchYear == year && matchMonth == month){
+            return res.status(400).json({message:'cant cancel within 3 days'});
+        }
+        
         //remove the seat from the reserved seats
         reservedSeats = match.reservedSeats;
         //loop through the two arrays and remove the seat
