@@ -309,7 +309,7 @@ const cancel = async (req,res,next) => {
         //array of seat numbers
         const {seatNumber}= req.body;
         if (!username || !match_id || !seatNumber){
-            return res.status(400).json({message:'error'});
+            return res.status(400).json({message:'error in request body'});
         }
         //check if the user exists
         const user = await User.findOne({username:username});

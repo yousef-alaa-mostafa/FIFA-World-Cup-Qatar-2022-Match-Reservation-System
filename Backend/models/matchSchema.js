@@ -6,7 +6,7 @@ const matchSchema = new mongoose.Schema ({
     team1: {type :String ,required :true,trim: true},
     team2: {type :String ,required :true,trim: true},
     date: { type :Date ,required :true,trim: true},
-    time: {type: String,required :true},
+    time: {type: Number,required :true},
     referee: {type: String,required :true},
     lineman1: {type: String,required :true},
     lineman2: {type: String,required :true},
