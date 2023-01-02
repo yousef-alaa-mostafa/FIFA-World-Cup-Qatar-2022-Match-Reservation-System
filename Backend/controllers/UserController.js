@@ -340,7 +340,10 @@ const cancel = async (req,res,next) => {
         if (matchDay - day <= 3 && matchYear == year && matchMonth == month){
             return res.status(400).json({message:'cant cancel within 3 days'});
         }
-        
+        if (matchDay <day && matchYear == year && matchMonth == month)
+        {
+            return res.status(400).json({message:'cant cancel after match'});
+        }
         //remove the seat from the reserved seats
         reservedSeats = match.reservedSeats;
         //loop through the two arrays and remove the seat
