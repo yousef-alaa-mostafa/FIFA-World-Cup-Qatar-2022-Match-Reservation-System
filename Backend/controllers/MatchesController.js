@@ -18,8 +18,8 @@ const addMatch = async (req, res) => {
         return res.status(400).json({ message: 'stadium not found' });
     }
     //check if staduium is available on the same date
-    const match1 = await Match.findOne({stadium:dbstadium._id ,date:date ,time:time});
-    if (match1) {
+    const match1 = await Match.findOne({stadium:dbstadium._id ,date:date });
+    if (match1 && Math.abs(match1.time - time) <= 3) {
         return res.status(400).json({ message: 'stadium is not available' });
     }
     //check if team1 or team2 have match on the same date
