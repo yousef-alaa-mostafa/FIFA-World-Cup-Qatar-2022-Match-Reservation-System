@@ -59,9 +59,9 @@ export default function Signup() {
   const [last_name, set_last_name] = useState("");
 
   const [Birth_Date, set_Birth_Date] = useState(new Date());
-  const [day_, setDay_] = useState();
-  const [month_, setmonth_] = useState();
-  const [year, setyear] = useState();
+  const [day_, setDay_] = useState("");
+  const [month_, setmonth_] = useState("");
+  const [year, setyear] = useState("");
 
   const [Gender, setGender] = useState("");
   const genderOptions = ["Male", "Female"];
@@ -118,6 +118,17 @@ export default function Signup() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
+
+    let temp_day = String(day_);
+    let temp_month = String(month_);
+    if (day_ && temp_day.length === 1) {
+      setDay_("0" + temp_day);
+    }
+    if (month_ && temp_month.length === 1) {
+      setmonth_("0" + temp_month);
+    }
+    console.log(temp_day.length);
+    console.log(year + "/" + month_ + "/" + day_);
     let user_ = {
       firstName: first_name,
       lastName: last_name,
@@ -137,10 +148,11 @@ export default function Signup() {
         user_,
         { validateStatus: false }
       );
+      console.log(data);
       localStorage.setItem("username", user);
       if (data.message === "Successful User signUp") {
         if (data.data.role === "Manager") {
-          window.open("./MatchesDetails", "_self");
+          window.open("./login", "_self");
         } else if (data.data.role === "Fan") {
           window.open("./customer/match details", "_self");
         } else if (data.data.role === "Admin") {

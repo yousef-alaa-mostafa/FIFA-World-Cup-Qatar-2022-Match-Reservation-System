@@ -65,6 +65,9 @@ export default function Login() {
 
     console.log(data);
 
+    if (data.message === "Manager not approved") {
+      setErrMsg(data.message);
+    }
     if (data.message === "Successful User login") {
       console.log(data.data.role);
       if (data.data.role === "Manager") {
@@ -84,6 +87,10 @@ export default function Login() {
     // setPwd("");
     // window.open("./", "_self");
   };
+
+  useEffect(() => {
+    localStorage.setItem("username", "");
+  }, []);
 
   return (
     <>

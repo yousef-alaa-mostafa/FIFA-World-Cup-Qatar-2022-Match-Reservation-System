@@ -47,6 +47,7 @@ export default function EditData() {
 
   const HandleClick = async () => {
     let username = localStorage.getItem("username");
+    // username = "manager";
     let bd = "";
     if (year && month_ && day_) {
       bd = year + "/" + month_ + "/" + day_;
@@ -55,7 +56,7 @@ export default function EditData() {
       firstName: First_name,
       lastName: Second_name,
       password: PWD,
-      role: Role,
+      // role: Role,
       birthdate: bd,
       // nationality: Nationality,
       // gender: Gender,
@@ -65,7 +66,7 @@ export default function EditData() {
       `${Route_}user/updateuser/${username}`,
       user
     );
-
+    console.log(username);
     console.log(data);
   };
 
@@ -106,7 +107,7 @@ export default function EditData() {
             value={PWD}
           />
           {/*--------------------role part------------------------ */}
-          <br />
+          {/* <br />
           <br />
           <Dropdown
             options={roleOptions}
@@ -114,7 +115,7 @@ export default function EditData() {
               setRole(data.value);
             }}
             placeholder="Role"
-          />
+          /> */}
           {/*--------------------birthdate part------------------------ */}
           <label>Birth Date:</label>
           <DatePicker
