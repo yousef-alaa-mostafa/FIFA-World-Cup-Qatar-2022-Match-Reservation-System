@@ -32,11 +32,13 @@ export default function CancelReservation() {
 
   const handleClick = async () => {
     // setErrMsg("not complete");
+
     let cancelationData = {
       username: localStorage.getItem("username"),
       match_id: chosenMatch,
       seatNumber: seat_,
     };
+    console.log(cancelationData);
     const { data } = await axios.post(
       `${Route_}reservations/cancel/${localStorage.getItem(
         "username"
@@ -51,11 +53,15 @@ export default function CancelReservation() {
       setSuccessMsg("Ticket cancelled");
       setErrMsg("");
     }
+    if (data.message === "cant cancel within 3 days") {
+      setErrMsg(data.message);
+    }
   };
 
   useEffect(() => {
     (async () => {
       let { data } = await axios.get(`${Route_}matches`);
+      console.log("ddd");
 
       console.log(data);
       let temp_matches = [];
@@ -72,6 +78,7 @@ export default function CancelReservation() {
 
   useEffect(() => {
     setMatchSeats(AvailableSeats);
+    setMatchSeats([]);
 
     (async () => {
       let { data } = await axios.get(
@@ -81,6 +88,9 @@ export default function CancelReservation() {
       );
       setMatchSeats(data.seats);
       console.log(data);
+      if (data.message === "Seat is not reserved by this user") {
+        setErrMsg("Seat is not reserved by this user");
+      }
     })();
   }, [chosenMatch]);
   return (
@@ -100,8 +110,6 @@ export default function CancelReservation() {
             {successMsg}
           </p>
 
-          <div style={{ marginTop: "50px" }}></div>
-          <br />
           <Dropdown
             options={Matches}
             onChange={(data) => {

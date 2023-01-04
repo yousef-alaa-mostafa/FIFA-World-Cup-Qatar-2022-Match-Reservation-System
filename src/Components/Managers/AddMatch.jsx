@@ -85,7 +85,7 @@ export default function AddMatch() {
       team2: secondCountry,
       stadium: Stadiums,
       date: match_date,
-      time: "time",
+      time: 3,
       lineman1: FirstLinesman,
       lineman2: SecondLinesman,
       referee: MainReferee,
@@ -100,6 +100,12 @@ export default function AddMatch() {
     //   // setErrMsg("User does not exist");
     // });
     console.log(data);
+    if (data.message === "team1 or team2 have match on the same date") {
+      setErrMsg(data.message);
+    }
+    if (data.message === "team1 and team2 can not be the same") {
+      setErrMsg(data.message);
+    }
   };
 
   useEffect(() => {

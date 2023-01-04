@@ -95,6 +95,7 @@ export default function EditMatches() {
     let updatedMatch = {
       stadium: Stadiums,
       date: tempDate,
+      time: 3,
       lineman1: FirstLinesman,
       lineman2: SecondLinesman,
       referee: MainReferee,
@@ -188,7 +189,7 @@ export default function EditMatches() {
             selected={Match_Date}
             onChange={(date) => {
               set_Match_Date(date);
-              setDay_(date.getDate());
+              setDay_(date.getDate() + 1);
               setyear(date.getFullYear());
               setmonth_(date.getMonth() + 1);
             }}
